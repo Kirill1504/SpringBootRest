@@ -7,44 +7,38 @@ import com.example.SpringBootApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/*
-@Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RestController
+public class RestAdminController {
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public RestAdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping(value = {"/users", "/"})
-    public String printUsers(Model model) {
-        List<User> userList = userService.listUsers();
-        User user = userService.fingByUserName(getCurrentUsername());
-        model.addAttribute("roles", user.getRolesStr());
-        model.addAttribute("user", user);
-        model.addAttribute("users", userList);
-        User newUser = new User();
-        model.addAttribute("newUser", newUser);
-        return "users";
+    @GetMapping("/admin/users")
+    public List<User> getAllUsers() {
+        return userService.listUsers();
     }
 
-    @PostMapping("/addUser")
-    public String addUser(@ModelAttribute("user") User user,
-                          @RequestParam(value = "roleAdmin", required = false) String roleAdmin,
-                          @RequestParam(value = "roleUser", required = false) String roleUser) {
+    @GetMapping("/get_auth_user")
+    public User getAuthUser(){
+        return userService.fingByUserName(getCurrentUsername());
+    }
+
+    @PostMapping("/admin/user")
+    public void addUser(User user,
+                        @RequestParam(value = "roleAdmin", required = false) String roleAdmin,
+                        @RequestParam(value = "roleUser", required = false) String roleUser) {
+
         Set<Role> roles = new HashSet<>();
         if (roleAdmin != null) {
             roles.add(roleService.findRoleByRoleName(roleAdmin));
@@ -54,16 +48,14 @@ public class AdminController {
         }
         user.setRoles(roles);
         userService.add(user);
-        return "redirect:/admin/users";
     }
 
-    @PostMapping("/update")
-    public String editUser(@ModelAttribute("user") User user,
-                           HttpServletRequest request) {
+    @PutMapping("/admin/user")
+    public void editUser(User user,
+                         @RequestParam(value = "roleAdmin", required = false) String roleAdmin,
+                         @RequestParam(value = "roleUser", required = false) String roleUser) {
 
-        Set<Role> roles = user.getRoles();
-        String roleUser = request.getParameter("ROLE_USER");
-        String roleAdmin = request.getParameter("ROLE_ADMIN");
+        Set<Role> roles = new HashSet<>();
         if (roleAdmin != null) {
             roles.add(roleService.findRoleByRoleName(roleAdmin));
         }
@@ -72,14 +64,11 @@ public class AdminController {
         }
         user.setRoles(roles);
         userService.edit(user);
-        return "redirect:/admin/users";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(@RequestParam("id") Long id) {
+    @DeleteMapping(path = "/admin/user")
+    public void deleteUserById(@RequestParam("id") Long id) {
         userService.delete(userService.getById(id));
-
-        return "redirect:/admin/users";
     }
 
     public String getCurrentUsername() {
@@ -87,5 +76,3 @@ public class AdminController {
         return auth.getName();
     }
 }
-*/
-

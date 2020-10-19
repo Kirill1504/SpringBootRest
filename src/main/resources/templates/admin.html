@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>USERS</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<body>
+<nav class="navbar navbar-dark bg-dark shadow mb-2">
+    <div th:object="${user}">
+        <a class="navbar-text text-white font-weight-bold" th:text="${user.username}"> </a>
+        <a class="navbar-text text-white"
+           th:text="' with roles : ' + ${roles}"></a>
+    </div>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row margin-top-3">
+        <div class="col-2">
+            <div class="nav nav-pills flex-column">
+                <a class="nav-link active" data-toggle="pill" href="#admin" role="tab">Admin</a>
+                <a class="nav-link" data-toggle="pill" href="#user" role="tab">User</a>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="admin">
+                    <h1>Admin panel</h1>
+                    <ul class="nav nav-tabs">
+                        <!--<h1>Admin panel</h1>-->
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#users">Users table</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#addUser">New User</a>
+                        </li>
+                    </ul>
+                    <!--Users table tab -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade shadow show active">
+                            <div class="panel-title bg-light">
+                                <h3>All users</h3>
+                            </div>
+                            <table class="table bg-white" th:id="usersTable">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>surname</th>
+                                    <th>age</th>
+                                    <th>username</th>
+                                    <th>password</th>
+                                    <th>roles</th>
+                                    <th>edit</th>
+                                    <th>delete</th>
+                                </tr>
+                                </thead>
+                                <tbody th:id="usersTbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--New user tab -->
+                        <div class="tab-pane fade col-lg-2" id="nav-new-user" role="tabpanel"
+                             aria-labelledby="nav-newuser-tab">
+
+                            <form>
+                                <label class="bold-font" for="userNameAdd">Name:</label>
+                                <input class="form-control" type="text" name="name" id="userNameAdd"
+                                       placeholder="Name"
+                                       required autofocus>
+                                <label class="bold-font" for="userSurnameAdd">Surname:</label>
+                                <input class="form-control" type="text" name="surname" id="userSurnameAdd"
+                                       placeholder="Surname"
+                                       required autofocus>
+                                <label class="bold-font" for="userAgeAdd">Age:</label>
+                                <input class="form-control" type="text" name="age" id="userAgeAdd"
+                                       placeholder="Age"
+                                       required autofocus>
+                                <label class="bold-font" for="userUsernameAdd">Username</label>
+                                <input class="form-control" type="text" name="username" th:id="UserUsernameAdd"
+                                       placeholder="Username">
+                                <label class="bold-font" for="userPasswordAdd">Password:</label>
+                                <input class="form-control" type="text" name="password" id="userPasswordAdd"
+
+                                       placeholder="Password" required>
+                                <label class="bold-font">Role</label><br>
+                                <input class="checkbox" type="checkbox" name="roleAdmin" value="admin">admin<br>
+                                <button class="btn btn-lg btn-primary btn-block sign-in-button col-lg-6 green"
+                                        type="button" onclick="addUser()">Save
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Edit user modal window -->
+<div class="modal fade" id="editUser" tabindex="-1" role="dialog"
+     aria-labelledby="editUserLabel" aria-hidden="true"> <!--id+-->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserLabel">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-auto text-center">
+                <form id="editUserForm"
+                      method="POST">
+                    <div class="form-group">
+                        <label for="userIdEdit"
+                               class="col-form-label bold-font">ID</label>
+                        <input type="text" class="form-control" id="userIdEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userNameEdit"
+                               class="col-form-label bold-font">Name</label>
+                        <input type="text" class="form-control" id="userNameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userSurnameEdit"
+                               class="col-form-label bold-font">Surname</label>
+                        <input type="text" class="form-control" id="userSurnameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userAgeEdit"
+                               class="col-form-label bold-font">Age</label>
+                        <input type="number" class="form-control" id="userAgeEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userUsernameEdit"
+                               class="col-form-label bold-font">Login</label>
+                        <input type="text" class="form-control" id="userUsernameEdit" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPasswordEdit"
+                               class="col-form-label bold-font">Password</label>
+                        <input type="text" class="form-control" id="userPasswordEdit" name="password">
+                    </div>
+                    <div>
+                        <label class="bold-font col-form-label">
+                            Role:</label><br>
+                        <input class="checkbox" type="checkbox" name="roleAdmin"
+                               value="admin" id="checkboxAdminEdit"> admin <br>
+                        <input class="checkbox" type="checkbox" name="roleUser"
+                               value="user" id="checkboxUserEdit"> user <br>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary" onclick="updateUser()">Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="../static/js/users.js"></script>
+</body>
+</html>
