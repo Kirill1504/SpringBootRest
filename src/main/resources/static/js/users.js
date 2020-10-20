@@ -45,11 +45,11 @@ function updateRow(user) {
     inputEdit.className = "btn green";
     inputEdit.value = "Edit";
     inputEdit.dataset.toggle = "modal";
-    inputEdit.dataset.target = "editUser";
+    inputEdit.dataset.target = "#editUser";
     inputEdit.onclick = function () {
         fillEditWindow(user.username);
     };
-    tdInputEdit.appendChild(tdInputEdit);
+    tdInputEdit.appendChild(inputEdit);
     tr.appendChild(tdInputEdit);
 
     var tdInputDelete = document.createElement('td');

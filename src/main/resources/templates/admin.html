@@ -9,11 +9,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <body>
 <nav class="navbar navbar-dark bg-dark shadow mb-2">
-    <div th:object="${user}">
+    <!--<div th:object="${user}">
         <a class="navbar-text text-white font-weight-bold" th:text="${user.username}"> </a>
         <a class="navbar-text text-white"
            th:text="' with roles : ' + ${roles}"></a>
-    </div>
+    </div>-->
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
             <a class="nav-link" href="/logout">Logout</a>
@@ -25,30 +25,30 @@
     <div class="row margin-top-3">
         <div class="col-2">
             <div class="nav nav-pills flex-column">
-                <a class="nav-link active" data-toggle="pill" href="#admin" role="tab">Admin</a>
-                <a class="nav-link" data-toggle="pill" href="#user" role="tab">User</a>
+                <a class="nav-link active" data-toggle="pill" href="#pill-admin" role="tab">Admin</a>
+                <a class="nav-link" data-toggle="pill" href="#pill-user" role="tab">User</a>
             </div>
         </div>
         <div class="col-10">
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="admin">
+                <div class="tab-pane fade show active" id="pill-admin">
                     <h1>Admin panel</h1>
                     <ul class="nav nav-tabs">
                         <!--<h1>Admin panel</h1>-->
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#users">Users table</a>
+                            <a class="nav-link active" data-toggle="tab" href="#nav-users-table">Users table</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#addUser">New User</a>
+                            <a class="nav-link" data-toggle="tab" href="#nav-new-user">New User</a>
                         </li>
                     </ul>
                     <!--Users table tab -->
                     <div class="tab-content">
-                        <div class="tab-pane fade shadow show active">
+                        <div class="tab-pane fade shadow show active" id="nav-users-table">
                             <div class="panel-title bg-light">
                                 <h3>All users</h3>
                             </div>
-                            <table class="table bg-white" th:id="usersTable">
+                            <table class="table bg-white" id="usersTable">
                                 <thead>
                                 <tr>
                                     <th>id</th>
@@ -62,7 +62,7 @@
                                     <th>delete</th>
                                 </tr>
                                 </thead>
-                                <tbody th:id="usersTbody">
+                                <tbody id="usersTbody">
 
                                 </tbody>
                             </table>
@@ -94,6 +94,7 @@
                                        placeholder="Password" required>
                                 <label class="bold-font">Role</label><br>
                                 <input class="checkbox" type="checkbox" name="roleAdmin" value="admin">admin<br>
+                                <input class="checkbox" type="checkbox" name="roleUser" value="user">user<br>
                                 <button class="btn btn-lg btn-primary btn-block sign-in-button col-lg-6 green"
                                         type="button" onclick="addUser()">Save
                                 </button>
@@ -172,9 +173,7 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
