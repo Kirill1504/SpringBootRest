@@ -34,6 +34,11 @@ public class RestAdminController {
         return userService.fingByUserName(getCurrentUsername());
     }
 
+    @GetMapping("/admin/user")
+    public User getUserByUsername(@RequestParam(value = "username") String username) {
+        return userService.fingByUserName(username);
+    }
+
     @PostMapping("/admin/user")
     public void addUser(User user,
                         @RequestParam(value = "roleAdmin", required = false) String roleAdmin,

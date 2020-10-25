@@ -3,15 +3,15 @@ $(document).ready(function () {
 });
 
 function loadUsersTable() {
-    var tBody = document.getElementById("usersTbody");
-    var div = document.createElement('div');
-    div.id = 'tableDiv';
+    var table = document.getElementById("usersTable");
+    var div = document.createElement('tbody');
+    div.id = 'tableDiv'
     $.get("/admin/users", function (data, status) {
         for (i = 0; i < data.length; i++) {
             updateRow(data[i]);
         }
     });
-    tBody.appendChild(div);
+    table.appendChild(div);
 }
 
 function updateRow(user) {
@@ -78,8 +78,8 @@ function getRolesNames(user) {
 }
 
 function fillEditWindow(userUsername) {
-    $.get("admin/users",
-        {login: userUsername},
+    $.get("admin/user",
+        {username: userUsername},
         function (user) {
             document.getElementById("userIdEdit").value = user.id;
             document.getElementById("userNameEdit").value = user.name;
@@ -90,12 +90,12 @@ function fillEditWindow(userUsername) {
 
             var rolesNames = new Set(getRolesNames(user));
 
-            if (rolesNames.has("admin")) {
+            if (rolesNames.has("ROLE_ADMIN")) {
                 document.getElementById("checkboxAdminEdit").checked = true;
             } else {
                 document.getElementById("checkboxAdminEdit").checked = false;
             }
-            if (rolesNames.has("user")) {
+            if (rolesNames.has("ROLE_USER")) {
                 document.getElementById("checkboxUserEdit").checked = true;
             } else {
                 document.getElementById("checkboxUserEdit").checked = false;
@@ -106,11 +106,11 @@ function addUser() {
     var roleSet = new Set(getCheckedCheckboxes());
     var roleAdmin;
     var roleUser;
-    if (roleSet.has("ADMIN")) {
-        roleAdmin = "ADMIN";
+    if (roleSet.has("admin")) {
+        roleAdmin = "ROLE_ADMIN";
     }
-    if (roleSet.has("USER")) {
-        roleUser = "USER";
+    if (roleSet.has("user")) {
+        roleUser = "ROLE_USER";
     }
     $.post("/admin/user",
         {
@@ -142,11 +142,11 @@ function updateUser() {
     var roleSet = new Set(getCheckedCheckboxes());
     var roleAdmin;
     var roleUser;
-    if (roleSet.has("ADMIN")) {
-        roleAdmin = "USER";
+    if (roleSet.has("admin")) {
+        roleAdmin = "ROLE_ADMIN";
     }
-    if (roleSet.has("USER")) {
-        roleUser = "USER";
+    if (roleSet.has("user")) {
+        roleUser = "ROLE_USER";
     }
 
     $.ajax({
@@ -155,7 +155,10 @@ function updateUser() {
         data: {
             id: $("#userIdEdit").val(),
             name: $("#userNameEdit").val(),
-            surname: $("#userPasswordEdit").val(),
+            surname: $("#userSurnameEdit").val(),
+            age: $("#userAgeEdit").val(),
+            username: $("#userUsernameEdit").val(),
+            password: $("#userPasswordEdit").val(),
             roleAdmin: roleAdmin,
             roleUser: roleUser
         },
